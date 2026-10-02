@@ -74,9 +74,71 @@
     timeline.appendChild(li);
   });
 
+  /* ---------- Couple photo ----------
+     Only revealed once the file actually loads, so a missing
+     photo leaves no empty gold frame behind. The cover frame
+     adapts to the photo's real shape: portrait gets the arch,
+     square/landscape gets a soft rounded frame. */
+  (function loadPhoto() {
+    var p = cfg.photo;
+    if (!p) return;
+
+    /* test-build ribbon */
+    var badge = $("testBadge");
+    if (badge && p.testBadge) {
+      badge.textContent = p.testBadge;
+      badge.hidden = false;
+    }
+
+    if (!p.src) return;
+
+    var cover = $("coverPhoto");
+    var targets = [
+      { frame: cover, img: $("coverPhotoImg"), caption: $("coverPhotoCaption") },
+      { frame: $("envPhoto"), img: $("envPhotoImg") },
+    ].filter(function (t) { return t.frame && t.img; });
+
+    if (!targets.length) return;
+
+    var probe = new Image();
+
+    probe.onload = function () {
+      if (cover) fitFrame(cover, probe.naturalWidth, probe.naturalHeight);
+
+      targets.forEach(function (t) {
+        t.img.src = p.src;
+        if (t.caption) {
+          /* caption is optional — the names already sit right below the photo */
+          if (p.caption) {
+            t.caption.textContent = p.caption;
+            t.frame.classList.add("is-captioned");
+          } else {
+            t.caption.textContent = "";
+          }
+        }
+        if (p.alt && t.frame.id === "coverPhoto") t.img.alt = p.alt;
+        t.frame.classList.add("is-ready");
+      });
+    };
+    probe.onerror = function () {
+      /* photo not provided yet — keep the layout clean */
+    };
+    probe.src = p.src;
+
+    function fitFrame(frame, w, h) {
+      if (!w || !h) return;
+      var ar = Math.min(Math.max(w / h, 0.62), 1.7);
+      frame.style.setProperty("--ar", ar.toFixed(3));
+      frame.setAttribute(
+        "data-shape",
+        ar <= 0.92 ? "portrait" : ar <= 1.25 ? "square" : "wide"
+      );
+    }
+  })();
+
   /* ---------- Petals ---------- */
   var petalHost = $("petals");
-  var COLORS = ["#F6DCDE", "#FBE3D3", "#EAE4F3", "#E7D6B4"];
+  var COLORS = ["#EBD391", "#F7E6BC", "#D98C99", "#5CB494"];
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function spawnPetals() {

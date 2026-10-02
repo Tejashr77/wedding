@@ -10,6 +10,18 @@ window.WEDDING = {
     monogram: "S · Y",
   },
 
+  /* ---------- PHOTO ----------
+     src:      path to the couple photo. Portrait 4:5 or 3:4 looks best.
+     caption:  optional line under the photo ("" hides it).
+     testBadge: set to "" to remove the "test build" ribbon before sharing.
+               The frame auto-fits: portrait -> arch, square/wide -> rounded. */
+  photo: {
+    src: "assets/Screenshot 2026-10-02 142022.png",
+    alt: "Sagar and Yashaswini",
+    caption: "",
+    testBadge: "Test build · sample photo",
+  },
+
   cover: {
     eyebrow: "Together with their families",
     groom: "Sagar",

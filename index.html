@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#FBF7F1" />
+  <meta name="theme-color" content="#093528" />
   <meta name="description" content="Sagar weds Yashaswini — you are invited to celebrate their wedding." />
   <title>Sagar weds Yashaswini</title>
 
@@ -20,6 +20,9 @@
 
     <div class="envelope" id="envelope">
       <div class="envelope__card" id="envelopeCard" aria-hidden="true">
+        <figure class="photo photo--seal" id="envPhoto">
+          <img id="envPhotoImg" alt="" />
+        </figure>
         <span class="envelope__card-mono">S · Y</span>
         <span class="envelope__card-rule"></span>
         <span class="envelope__card-txt">Sagar &amp; Yashaswini</span>
@@ -62,6 +65,14 @@
       <div class="corner corner--tr" aria-hidden="true"></div>
       <div class="corner corner--bl" aria-hidden="true"></div>
       <div class="corner corner--br" aria-hidden="true"></div>
+
+      <p class="testbadge" id="testBadge" hidden></p>
+
+      <figure class="photo photo--cover" id="coverPhoto">
+        <img id="coverPhotoImg" alt="Sagar &amp; Yashaswini" />
+        <span class="photo__ring" aria-hidden="true"></span>
+        <span class="photo__caption" id="coverPhotoCaption"></span>
+      </figure>
 
       <svg class="cover__kalash" viewBox="0 0 80 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.1">
         <path d="M40 6c3 5 3 8 0 12-3-4-3-7 0-12z" />
@@ -173,7 +184,7 @@
     </section>
 
     <!-- ---------- BLESSINGS ---------- -->
-    <section class="card card--blush reveal">
+    <section class="card card--jade reveal">
       <div class="card__texture" aria-hidden="true"></div>
       <svg class="card__flourish" viewBox="0 0 96 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1">
         <path d="M4 13h28M64 13h28" />
