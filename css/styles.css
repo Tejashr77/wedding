@@ -48,6 +48,7 @@
   --sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.62, 0.02, 0.28, 1);
   --shadow-card: 0 30px 64px -30px rgba(2, 20, 15, 0.78);
   --shadow-lift: 0 40px 76px -28px rgba(2, 20, 15, 0.85);
   --ring: 0 0 0 1px rgba(201, 162, 39, 0.38);
@@ -164,7 +165,9 @@ button, input { font: inherit; color: inherit; }
     radial-gradient(620px 460px at 14% 88%, rgba(201, 162, 39, 0.26) 0%, transparent 62%),
     radial-gradient(640px 460px at 88% 12%, rgba(169, 86, 106, 0.3) 0%, transparent 60%),
     linear-gradient(168deg, var(--jade-800) 0%, var(--jade-900) 60%, var(--jade-950) 100%);
-  transition: opacity 0.8s var(--ease), visibility 0.8s;
+  transform: scale(1);
+  will-change: transform, opacity;
+  transition: opacity 0.95s var(--ease-soft), transform 0.95s var(--ease-soft), visibility 0.95s;
 }
 .envelope-stage::after {
   content: "";
@@ -176,7 +179,7 @@ button, input { font: inherit; color: inherit; }
   pointer-events: none;
 }
 .envelope-stage.is-opening { pointer-events: none; }
-.envelope-stage.is-gone { opacity: 0; visibility: hidden; }
+.envelope-stage.is-gone { opacity: 0; visibility: hidden; transform: scale(1.06); }
 
 .envelope {
   position: relative;
@@ -203,8 +206,19 @@ button, input { font: inherit; color: inherit; }
   border: 1px solid var(--gold);
   box-shadow: 0 10px 26px -16px rgba(0, 0, 0, 0.8), var(--ring);
   transform: translateY(18%);
-  transition: transform 1.05s var(--ease);
+  will-change: transform;
+  transition: box-shadow 0.9s var(--ease-soft);
 }
+.envelope.is-open .envelope__card {
+  z-index: 6;
+  box-shadow: 0 34px 58px -24px rgba(0, 0, 0, 0.78), 0 0 0 1px rgba(201, 162, 39, 0.6);
+  animation: card-rise 1.4s var(--ease-soft) 0.42s both;
+}
+@keyframes card-rise {
+  from { transform: translateY(18%) scale(1) rotate(0deg); }
+  to   { transform: translateY(-132%) scale(0.955) rotate(-1.6deg); }
+}
+
 .envelope__card-mono {
   font-family: var(--serif);
   font-size: 1.4rem;
@@ -217,10 +231,6 @@ button, input { font: inherit; color: inherit; }
   font-size: 1rem;
   font-style: italic;
   color: var(--jade-800);
-}
-.envelope.is-open .envelope__card {
-  z-index: 6;
-  transform: translateY(-120%) rotate(-0.8deg);
 }
 
 .envelope__back {
@@ -238,9 +248,15 @@ button, input { font: inherit; color: inherit; }
   inset: 0;
   transform-origin: 50% 0;
   transform-style: preserve-3d;
-  transition: transform 1.05s var(--ease);
+  will-change: transform;
 }
-.envelope.is-open .envelope__flap { transform: rotateX(-172deg); }
+.envelope.is-open .envelope__flap {
+  animation: flap-open 1.25s var(--ease-soft) both;
+}
+@keyframes flap-open {
+  from { transform: rotateX(0deg); }
+  to   { transform: rotateX(-177deg); }
+}
 
 .flap__face { position: absolute; inset: 0; }
 .flap__face--front {
@@ -290,7 +306,7 @@ button, input { font: inherit; color: inherit; }
   color: var(--jade-950);
   background: radial-gradient(circle at 34% 28%, var(--gold-pale) 0%, var(--gold-rich) 46%, var(--gold) 72%, var(--gold-deep) 100%);
   box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  transition: opacity 0.45s var(--ease), transform 0.6s var(--ease);
+  will-change: transform, opacity;
 }
 .envelope__seal-ring {
   position: absolute;
@@ -298,16 +314,26 @@ button, input { font: inherit; color: inherit; }
   border-radius: 50%;
   border: 1px dashed rgba(3, 21, 15, 0.5);
 }
-.envelope.is-open .envelope__seal { opacity: 0; transform: translate(-50%, -50%) scale(0.55); }
+.envelope.is-open .envelope__seal {
+  animation: seal-break 0.55s var(--ease-soft) 0.08s both;
+}
+@keyframes seal-break {
+  from { opacity: 1; transform: scale(1) rotate(0deg); }
+  to   { opacity: 0; transform: scale(0.35) rotate(-16deg); }
+}
 
 /* CTA under envelope */
 .envelope__cta {
   position: relative;
   z-index: 6;
   text-align: center;
-  transition: opacity 0.45s var(--ease), transform 0.6s var(--ease);
+  transition: opacity 0.6s var(--ease-soft), transform 0.75s var(--ease-soft);
 }
-.envelope-stage.is-opening .envelope__cta { opacity: 0; transform: translateY(16px); }
+.envelope-stage.is-opening .envelope__cta {
+  opacity: 0;
+  transform: translateY(14px) scale(0.97);
+  pointer-events: none;
+}
 
 .envelope__eyebrow {
   margin: 0 0 0.5rem;
@@ -934,8 +960,10 @@ button, input { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
   .reveal { opacity: 1; transform: none; }

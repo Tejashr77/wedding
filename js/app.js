@@ -192,22 +192,24 @@
     });
   }
 
-  /* ---------- Open / replay ---------- */
+  /* ---------- Open / replay ----------
+     Timings line up with the CSS keyframes:
+     seal 0.08s+0.55s · flap 0s+1.25s · card 0.42s+1.4s · stage fade 0.95s */
   function openInvitation() {
     stage.classList.add("is-opening");
     envelope.classList.add("is-open");
 
-    // the letter rises out, then the invitation reveals
+    // the letter is most of the way out — bring the invitation in behind the stage
     window.setTimeout(function () {
       invitation.hidden = false;
       observeReveals(invitation);
-      window.scrollTo(0, 0);
-    }, reduced ? 0 : 780);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, reduced ? 0 : 1250);
 
     window.setTimeout(function () {
       stage.classList.add("is-gone");
       stage.setAttribute("aria-hidden", "true");
-    }, reduced ? 0 : 1650);
+    }, reduced ? 0 : 1700);
   }
 
   function replayInvitation() {
